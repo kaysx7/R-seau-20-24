@@ -1,5 +1,7 @@
 # tp1
+# I-Exploration locale en solo
 
+## 1 affichage d'information sur la pile TCP/IP locale
 🌞 Affichez les infos des cartes réseau de votre PC
  ```
  C:\Users\kayss> ipconfig
@@ -57,7 +59,7 @@ Adresse IPv6 locale de lien: fe80::dbd0:1c59:2ff9:b253%17
 Passerelle par défaut IPv6: 
 Serveur DNS IPv6: 
 ```
-2. Modifications des informations
+## 2. Modifications des informations
    
 A. Modification d'adresse IP (part 1)
 
@@ -72,10 +74,10 @@ Internet n'est plus présent
 
 j'ai perdu l'acces a Internet par le simple fait que j'ai utilisé la même IP que quelqu'un d'autre
 
-II. Exploration locale en duo
+# II. Exploration locale en duo
 
 
-3. Modification d'adresse IP
+## 3. Modification d'adresse IP
    
    🌞 Modifiez l'IP des deux machines pour qu'elles soient dans le même réseau
 
@@ -134,7 +136,7 @@ C:\Users\kayss>arp -a
   224.0.0.252           01-00-5e-00-00-fc     statique
   239.255.255.250       01-00-5e-7f-ff-fa     statique
 ```
-4/ PETIT CHAT PRIVÉ
+### 4/ PETIT CHAT PRIVÉ
 
 🌞 sur le PC client
 
@@ -157,7 +159,7 @@ netstat -a -n -b | Select-String "8888" -Context 0,1
 blabla
 dvdvvd
 ```
-5. FIREWALL
+### 5. FIREWALL
 
 🌞 Activez et configurez votre firewall
 ```
@@ -173,7 +175,7 @@ Paquets : envoyés = 4, reçus = 4, perdus = 0 (perte 0%),
 Durée approximative des boucles en millisecondes :
 Minimum = 2ms, Maximum = 3ms, Moyenne = 2ms
 ```
-6. Utilisation d'un des deux comme gateway
+### 6. Utilisation d'un des deux comme gateway
 
 🌞Tester l'accès internet
 ```
@@ -207,3 +209,4 @@ Détermination de l’itinéraire vers 10.10.10.9 avec un maximum de 30 sauts.
 9    27 ms    25 ms    28 ms  174.225.63.86.rev.sfr.net [86.63.225.174]
 10    27 ms    26 ms    26 ms  169.225.63.86.rev.sfr.net [86.63.225.169]
 ```
+# III. Manipulations d'autres outils/protocoles côté client
