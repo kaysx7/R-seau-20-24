@@ -210,3 +210,56 @@ Détermination de l’itinéraire vers 10.10.10.9 avec un maximum de 30 sauts.
 10    27 ms    26 ms    26 ms  169.225.63.86.rev.sfr.net [86.63.225.169]
 ```
 # III. Manipulations d'autres outils/protocoles côté client
+
+## 1. DHCP
+
+🌞Exploration du DHCP, depuis votre PC
+```
+Carte réseau sans fil Wi-Fi :
+
+   Suffixe DNS propre à la connexion. . . :
+   Description. . . . . . . . . . . . . . : Intel(R) Wi-Fi 6 AX201 160MHz
+   Adresse physique . . . . . . . . . . . : 70-D8-23-D5-D2-5C
+   DHCP activé. . . . . . . . . . . . . . : Oui
+   Configuration automatique activée. . . : Oui
+   Adresse IPv6 de liaison locale. . . . .: fe80::dbd0:1c59:2ff9:b253%17(préféré)
+   Adresse IPv4. . . . . . . . . . . . . .: 10.33.50.209(préféré)
+   Masque de sous-réseau. . . . . . . . . : 255.255.252.0
+   Bail obtenu. . . . . . . . . . . . . . : lundi 23 octobre 2023 09:17:26
+   Bail expirant. . . . . . . . . . . . . : mardi 24 octobre 2023 09:17:17
+   Passerelle par défaut. . . . . . . . . : 10.33.51.254
+   Serveur DHCP . . . . . . . . . . . . . : 10.33.51.254
+   IAID DHCPv6 . . . . . . . . . . . : 124835875
+   DUID de client DHCPv6. . . . . . . . : 00-01-00-01-2B-81-72-5A-04-7C-16-A1-BD-25
+   Serveurs DNS. . .  . . . . . . . . . . : 10.33.10.2
+                                       8.8.8.8
+   NetBIOS sur Tcpip. . . . . . . . . . . : Activé
+```
+## 2. DNS
+
+🌞 Trouver l'adresse IP du serveur DNS que connaît votre ordinateur
+```
+C:\Users\kayss> ipconfig /all
+
+Configuration IP de Windows
+   Serveurs DNS. . .  . . . . . . . : 10.33.10.2
+                                       8.8.8.8
+```
+🌞 Utiliser, en ligne de commande l'outil nslookup (Windows, MacOS) ou dig (GNU/Linux, MacOS) pour faire des requêtes DNS à la main
+```
+C:\Users\kayss>nslookup ynov.com 8.8.8.8
+Serveur :   dns.google
+Address:  8.8.8.8
+
+Réponse ne faisant pas autorité :
+Nom :    ynov.com
+Addresses:  2606:4700:20::ac43:4ae2
+          2606:4700:20::681a:be9
+          2606:4700:20::681a:ae9
+          104.26.10.233
+          172.67.74.226
+          104.26.11.233
+```
+# IV. Wireshark
+
+🌞 Utilisez le pour observer les trames qui circulent entre vos deux carte Ethernet. Mettez en évidence :
