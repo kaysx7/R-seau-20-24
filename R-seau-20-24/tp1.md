@@ -1,7 +1,7 @@
-# tp1
+# TP1 - Premier pas réseau
 # I-Exploration locale en solo
 
-## 1 affichage d'information sur la pile TCP/IP locale
+### 1 affichage d'information sur la pile TCP/IP locale
 🌞 Affichez les infos des cartes réseau de votre PC
  ```
  C:\Users\kayss> ipconfig
