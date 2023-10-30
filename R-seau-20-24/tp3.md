@@ -70,6 +70,13 @@ sudo ip route add 10.3.2.12 via 10.3.1.254 dev enp0s3
 
 🌞Analyse des échanges ARP
 
+ordre | type tram | ip source | MAC source | IP Destination | MAC Destination
+ :---: | :---: | :---: | :---: | :---: | :---: 
+1 | ARP request | 10.3.2.12 | x | 10.3.2.254 | x 
+2 | ARP reply | 10.3.2.12 | x | x |  08:00:27:c8:89:4b
+3 | ping | 10.3.1.11 | x | 10.3.2.12 | x
+4 | pong| 10.3.2.12 | x | 10.3.1.11 | x
+
 ## 3. Accès internet
 
 ``````
