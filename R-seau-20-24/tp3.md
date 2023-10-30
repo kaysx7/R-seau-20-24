@@ -29,7 +29,7 @@ PING 10.3.1.12 (10.3.1.12) 56(84) bytes of data.
 🌞Analyse de trames
 
 ``````
-[dany@localhost ~]$ sudo tcpdump
+[kayss@localhost ~]$ sudo tcpdump
 dropped privs to tcpdump
 tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
 listening on enp0s3, link-type EN10MB (Ethernet), snapshot length 262144 bytes
@@ -41,3 +41,57 @@ listening on enp0s3, link-type EN10MB (Ethernet), snapshot length 262144 bytes
 ``````
 
 # II. Routage
+
+## 1. Mise en place du routage
+
+🌞Ajouter les routes statiques nécessaires pour que john et marcel puissent se ping
+pour que john ping marcel
+
+pour que marcel ping john
+
+``````
+sudo ip route add 10.3.1.11 via 10.3.2.254 dev enp0s3
+``````
+``````
+[kayss@localhost ~]$ ping 10.3.2.12
+PING 10.3.2.12 (10.3.2.12) 56(84) bytes of data.
+64 bytes from 10.3.2.12: icmp_seq=1 ttl=63 time=1.10 ms
+64 bytes from 10.3.2.12: icmp_seq=2 ttl=63 time=1.32 ms
+64 bytes from 10.3.2.12: icmp_seq=3 ttl=63 time=1.75 ms
+64 bytes from 10.3.2.12: icmp_seq=4 ttl=63 time=1.41 ms
+
+``````
+pour que john ping marcel
+
+``````
+sudo ip route add 10.3.2.12 via 10.3.1.254 dev enp0s3
+``````
+## 2. Analyse de trames
+
+🌞Analyse des échanges ARP
+
+## 3. Accès internet
+
+``````
+[kayss@localhost ~]$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=115 time=14.4 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=115 time=16.6 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=115 time=159 ms
+``````
+🌞Donnez un accès internet à vos machines - config clients
+
+```
+[kayss@localhost ~]$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=114 time=167 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=114 time=16.2 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=114 time=31.7 ms
+``````
+``````
+[kayss@localhost ~]$ ping google.com
+PING google.com (216.58.214.78) 56(84) bytes of data.
+64 bytes from par10s39-in-f14.1e100.net (216.58.214.78): icmp_seq=1 ttl=56 time=25.1 ms
+64 bytes from fra15s10-in-f78.1e100.net (216.58.214.78): icmp_seq=2 ttl=56 time=26.8 ms
+``````
+🌞Analyse de trames
