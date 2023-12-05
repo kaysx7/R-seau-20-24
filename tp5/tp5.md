@@ -3,7 +3,13 @@
 ## I. First steps
 
 🌞 Déterminez, pour ces 5 applications, si c'est du TCP ou de l'UDP
-
+```````
+youtube.com
+PORT : UDP
+IP : 142.250.178.138
+Port serveur : 443
+port local : 63676
+``````````
 ``````
 netflix.com 
 PORT : UDP
@@ -32,13 +38,8 @@ IP : 216.58.214.165
 port serveur : 443
 port local : 59957
 ``````
-``````````
-app.envoituresimone.com
-port : TCP
-IP : 172.217.20.206
-port serveur : 433
-port local : 60015
-``````````
+
+
 🌞 Demandez l'avis à votre OS
 
 ``````
@@ -453,3 +454,87 @@ UDP    [fe80::b5e9:fd4b:53ca:a8f8%13]:50790  *:*
 SSDPSRV
 [svchost.exe]
 ``````````
+# II. Setup Virtuel
+
+## 1. SSH
+
+🌞 Examinez le trafic dans Wireshark
+
+``````
+= TCP
+``````
+🌞 Demandez aux OS
+
+``````
+PS C:\Users\kayss> netstat
+
+Connexions actives
+
+  Proto  Adresse locale         Adresse distante       État
+  TCP    10.5.1.1:28517         10.5.1.11:ssh          ESTABLISHED
+  ``````
+  ``````````
+  [kayss@node ~]$ ss -t
+State        Recv-Q        Send-Q               Local Address:Port               Peer Address:Port        Process
+ESTAB        0             52                       10.5.1.11:ssh                    10.5.1.1:28517
+``````````
+## 2. Routage
+
+🌞 Prouvez que
+
+node1.tp5.b1 a un accès internet
+
+``````````
+[kayss@node ~]$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=115 time=25.9 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=115 time=11.6 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=115 time=12.5 ms
+^C
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 1.1340/18.748/27.356/6.486 ms
+``````````
+node1.tp5.b1 peut résoudre des noms de domaine publics (comme www.ynov.com)
+
+## 3. Serveur Web
+
+🌞 Installez le paquet nginx
+````````
+[kayss@web ~]$ sudo dnf install nginx -y
+````````
+🌞 Créer le site web
+
+````````
+[kayss@web var]$ mkdir www
+````````
+### +
+````````
+[kayss@web var]$ sudo mkdir www
+````````
+### +
+````````
+[kayss@web site_web_nul]$ sudo nano index.html
+````````
+🌞 Donner les bonnes permissions
+````````
+[kayss@web ~]$ sudo chown -R nginx:nginx /var/www/site_web_nul
+````````````
+🌞 Créer un fichier de configuration NGINX pour notre site web
+````````
+[kayss@web ~]$ sudo nano /etc/nginx/conf.d/site_web_nul.conf
+````````
+🌞 Démarrer le serveur web !
+````````
+````````
+
+🌞 Ouvrir le port firewall
+````````
+````````
+🌞 Visitez le serveur web !
+````````
+````````
+
+🌞 Visualiser le port en écoute
+````````
+````````
