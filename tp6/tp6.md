@@ -103,3 +103,71 @@ zone "1.4.10.in-addr.arpa" IN {
      allow-query { any; };
 };
 ````````
+un systemctl status named qui prouve que le service tourne bien.
+
+``````````
+[kayss@dns ~]$ systemctl status named
+● named.service - Berkeley Internet Name Domain (DNS)
+     Loaded: loaded (/usr/lib/systemd/system/named.service; enabled; preset: disabled)
+     Active: active (running) since Fri 2023-11-17 11:09:40 CET; 12min ago
+   Main PID: 4297 (named)
+      Tasks: 5 (limit: 4605)
+     Memory: 20.4M
+        CPU: 39ms
+     CGroup: /system.slice/named.service
+             └─4297 /usr/sbin/named -u named -c /etc/named.conf
+``````````
+une commande ss qui prouve que le service écoute bien sur un port
+````````
+[kayss@dns ~]$ sudo ss -tulpn
+Netid State  Recv-Q Send-Q   Local Address:Port   Peer Address:Port Process
+udp   UNCONN 0      0            127.0.0.1:323         0.0.0.0:*     users:(("chronyd",pid=676,fd=5))
+udp   UNCONN 0      0           10.6.1.101:53          0.0.0.0:*     users:(("named",pid=4297,fd=19))
+udp   UNCONN 0      0            127.0.0.1:53          0.0.0.0:*     users:(("named",pid=4297,fd=16))
+udp   UNCONN 0      0                [::1]:323            [::]:*     users:(("chronyd",pid=676,fd=6))
+udp   UNCONN 0      0                [::1]:53             [::]:*     users:(("named",pid=4297,fd=22))
+tcp   LISTEN 0      10          10.6.1.101:53          0.0.0.0:*     users:(("named",pid=4297,fd=21))
+tcp   LISTEN 0      10           127.0.0.1:53          0.0.0.0:*     users:(("named",pid=4297,fd=17))
+tcp   LISTEN 0      128            0.0.0.0:22          0.0.0.0:*     users:(("sshd",pid=691,fd=3))
+tcp   LISTEN 0      4096         127.0.0.1:953         0.0.0.0:*     users:(("named",pid=4297,fd=24))
+tcp   LISTEN 0      4096             [::1]:953            [::]:*     users:(("named",pid=4297,fd=25))
+tcp   LISTEN 0      128               [::]:22             [::]:*     users:(("sshd",pid=691,fd=4))
+tcp   LISTEN 0      10               [::1]:53             [::]:*     users:(("named",pid=4297,fd=23))
+````````
+🌞 Ouvrez le bon port dans le firewall
+``````
+[kayss@dns ~]$ sudo ss -tulpn | grep :53
+udp   UNCONN 0      0         10.6.1.101:53        0.0.0.0:*    users:(("named",pid=4297,fd=19))
+udp   UNCONN 0      0          127.0.0.1:53        0.0.0.0:*    users:(("named",pid=4297,fd=16))
+udp   UNCONN 0      0              [::1]:53           [::]:*    users:(("named",pid=4297,fd=22))
+tcp   LISTEN 0      10        10.6.1.101:53        0.0.0.0:*    users:(("named",pid=4297,fd=21))
+tcp   LISTEN 0      10         127.0.0.1:53        0.0.0.0:*    users:(("named",pid=4297,fd=17))
+tcp   LISTEN 0      10             [::1]:53           [::]:*    users:(("named",pid=4297,fd=23))
+``````````
+ouvrez ce port dans le firewall de la machine dns.tp6.b1 (voir le mémo réseau Rocky)
+
+````````
+[kayss@dns ~]$ sudo firewall-cmd --add-port=53/udp --permanent
+success
+[kayss@dns ~]$ sudo firewall-cmd --reload
+success
+````````
+
+## 3 Test 
+
+
+🌞 Sur la machine john.tp6.b1
+
+configurez la machine pour qu'elle utilise votre serveur DNS quand elle a besoin de résoudre des noms
+
+````````
+[kayss@john ~]$ ping john.tp6.b1
+PING john.tp6.b1(john.tp6.b1 (fe80::a00:27ff:fe68:4adc%enp0s3)) 56 data bytes
+64 bytes from john.tp6.b1 (fe80::a00:27ff:fe68:4adc%enp0s3): icmp_seq=1 ttl=64 time=0.024 ms
+64 bytes from john.tp6.b1 (fe80::a00:27ff:fe68:4adc%enp0s3): icmp_seq=2 ttl=64 time=0.036 ms
+^C64 bytes from fe80::a00:27ff:fe68:4adc%enp0s3: icmp_seq=3 ttl=64 time=0.037 ms
+
+--- john.tp6.b1 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2054ms
+rtt min/avg/max/mdev = 0.024/0.032/0.037/0.005 ms
+````````
