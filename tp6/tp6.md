@@ -171,3 +171,103 @@ PING john.tp6.b1(john.tp6.b1 (fe80::a00:27ff:fe68:4adc%enp0s3)) 56 data bytes
 3 packets transmitted, 3 received, 0% packet loss, time 2054ms
 rtt min/avg/max/mdev = 0.024/0.032/0.037/0.005 ms
 ````````
+``````````
+[kayss@john network-scripts]$ ping dns.tp6.b1
+PING dns.tp6.b1 (10.6.1.101) 56(84) bytes of data.
+64 bytes from 10.6.1.101 (10.6.1.101): icmp_seq=1 ttl=64 time=0.202 ms
+64 bytes from 10.6.1.101 (10.6.1.101): icmp_seq=2 ttl=64 time=0.305 ms
+^C
+--- dns.tp6.b1 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1032ms
+rtt min/avg/max/mdev = 0.202/0.253/0.305/0.051 ms
+``````````
+mais aussi des noms comme www.ynov.com
+
+````````
+[kayss@john network-scripts]$ ping www.ynov.com
+PING www.ynov.com (104.26.10.233) 56(84) bytes of data.
+64 bytes from 104.26.10.233 (104.26.10.233): icmp_seq=1 ttl=55 time=19.4 ms
+64 bytes from 104.26.10.233 (104.26.10.233): icmp_seq=2 ttl=55 time=20.7 ms
+^C
+--- www.ynov.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1002ms
+rtt min/avg/max/mdev = 19.367/20.030/20.693/0.663 ms
+````````
+🌞 Sur votre PC
+
+````````
+PS C:\Users\kayss> nslookup john.tp6.b1
+Serveur :   UnKnown
+Address:  10.6.1.101
+
+Nom :    john.tp6.b1
+````````
+## III. Serveur DHCP
+
+🌞 Installer un serveur DHCP
+
+````````
+[kayss@dhcp ~]$ sudo nano cat /etc/dhcp/dhcpd.conf
+#
+# DHCP Server Configuration file.
+#   see /usr/share/doc/dhcp-server/dhcpd.conf.example
+#   see dhcpd.conf(5) man page
+#
+# create new
+# specify domain name
+option domain-name     "dns.tp6.b1";
+# specify DNS server's hostname or IP address
+option domain-name-servers     10.6.1.101;
+# default lease time
+default-lease-time 600;
+# max lease time
+max-lease-time 7200;
+# this DHCP server to be declared valid
+authoritative;
+# specify network address and subnetmask
+subnet 10.6.1.0 netmask 255.255.255.0 {
+    # specify the range of lease IP address
+    range dynamic-bootp 10.6.1.13 10.6.1.37;
+    # specify broadcast address
+    option broadcast-address 10.6.1.255;
+    # specify gateway
+    option routers 10.6.1.254;
+}
+````````
+🌞 Test avec john.tp6.b1
+
+````````
+[kayss@john ~]$ ip a
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:a3:16:88 brd ff:ff:ff:ff:ff:ff
+    inet 10.6.1.13/24 brd 10.6.1.255 scope global dynamic noprefixroute enp0s3
+       valid_lft 570sec preferred_lft 570sec
+    inet6 fe80::a00:27ff:fea3:1688/64 scope link
+       valid_lft forever preferred_lft forever
+
+````````
+````````
+[kayss@john ~]$ ping google.com
+PING google.com (142.250.201.174) 56(84) bytes of data.
+64 bytes from par21s23-in-f14.1e100.net (142.250.201.174): icmp_seq=1 ttl=115 time=15.9 ms
+64 bytes from par21s23-in-f14.1e100.net (142.250.201.174): icmp_seq=2 ttl=115 time=18.7 ms
+^C
+--- google.com ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1126ms
+rtt min/avg/max/mdev = 15.918/17.317/18.717/1.679 ms
+````````
+
+🌞 Requête web avec john.tp6.b1
+
+````````
+[kayss@john ~]$ curl www.ynov.com
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>302 Found</title>
+</head><body>
+<h1>Found</h1>
+<p>The document has moved <a href="https://www.ynov.com/">here</a>.</p>
+<hr>
+<address>Apache/2.4.41 (Ubuntu) Server at ynov.com Port 80</address>
+</body></html>
+````````
