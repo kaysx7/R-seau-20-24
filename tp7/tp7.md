@@ -34,14 +34,14 @@ Warning: Permanently added '10.7.1.11' to the list of known hosts.
 
 🌞 Consulter l'état actuel
 
-vérifiez que le serveur SSH tourne actuellement sur le port 22/tcp
+- vérifiez que le serveur SSH tourne actuellement sur le port 22/tcp
 
 ``````````
 [kayss@router ~]$ ss -tn
 State Recv-Q Send-Q Local Address:Port Peer Address:Port Process
 ESTAB 0      0         10.7.1.254:22       10.7.1.1:21739
 ``````````
-vérifiez que le serveur SSH est disponible actuellement sur TOUTES les IPs de la machine
+- vérifiez que le serveur SSH est disponible actuellement sur TOUTES les IPs de la machine
 
 ````````
 [kayss@router ~]$ ss -lt
@@ -60,7 +60,7 @@ ListenAddress 10.7.1.254
 ``````````
 🌞 Prouvez que le changement a pris effet
 
-Toujours avec la même commande ss vous devriez voir que : le serveur SSH écoute désormais sur 10.7.1.11 uniquement le serveur SSH écoute désormais sur le port choisi
+- Toujours avec la même commande ss vous devriez voir que : le serveur SSH écoute désormais sur 10.7.1.11 uniquement le serveur SSH écoute désormais sur le port choisi
 
 ````````
 [kayss@router ~]$ sudo ss -lntp
@@ -131,7 +131,7 @@ Last login: Fri Dec 07 16:42:34 2023 from 10.7.1.1
 ````````
 🌞 Tentez une nouvelle connexion au serveur
 
-le message nous indique que la clé enregistré pour le router n'est pas la même que celle de la nouvelle clé du router
+- le message nous indique que la clé enregistré pour le router n'est pas la même que celle de la nouvelle clé du router
 
 ````````
 $ ssh kayss@10.7.1.254
